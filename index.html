@@ -16,28 +16,31 @@
       background-position: center;
       text-align: center;
       overflow: hidden;
-      transition: background 0.5s ease-in-out;
+      transition: background 0.8s ease-in-out;
     }
 
+    /* Glassmorphism effect: transparent but readable */
     .card {
       position: relative;
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.2); 
       padding: 40px 50px;
       border-radius: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(8px); /* Blurs the background pic behind the card */
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
       max-width: 400px;
-      backdrop-filter: blur(5px);
+      z-index: 5;
     }
 
-    h1 { color: #e63946; margin-bottom: 10px; }
-    h2 { margin-top: 0; font-weight: normal; }
-    p { font-size: 18px; margin: 20px 0 30px; }
+    h1 { color: #e63946; margin-bottom: 10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+    h2 { margin-top: 0; font-weight: bold; color: #444; }
+    p { font-size: 18px; margin: 20px 0 30px; color: #333; }
 
     .buttons {
       display: flex;
       justify-content: center;
       gap: 20px;
-      position: relative;
       height: 50px;
     }
 
@@ -50,13 +53,14 @@
       transition: transform 0.2s ease;
     }
 
-    #yesBtn { background-color: #e63946; color: white; z-index: 10; }
+    #yesBtn { background-color: #e63946; color: white; position: relative; z-index: 10; }
+    
     #noBtn { 
       background-color: #adb5bd; 
       color: #333; 
-      position: absolute; 
-      left: 50%; 
-      transform: translateX(-50%); 
+      position: absolute; /* Changed back to absolute to stay near the card initially */
+      transition: all 0.2s ease;
+      z-index: 11;
     }
 
     .heart {
@@ -65,6 +69,7 @@
       color: #e63946;
       pointer-events: none;
       animation: floatUp 1s forwards;
+      z-index: 100;
     }
 
     @keyframes floatUp {
@@ -78,12 +83,12 @@
   <div class="card" id="mainCard">
     <h1>💖 Save the Date 💖</h1>
     <h2>February 14th</h2>
-    <p>
+    <p id="mainText">
       Will you be my Valentine? 🌹<br>
       Dinner, laughs, and good vibes guaranteed.
     </p>
 
-    <div class="buttons">
+    <div class="buttons" id="btnContainer">
       <button id="yesBtn">Yes 💘</button>
       <button id="noBtn">No 🙃</button>
     </div>
@@ -95,52 +100,57 @@
     const card = document.getElementById("mainCard");
     let scale = 1;
 
-    // NO button teleport / dodge
-    noBtn.addEventListener("mouseenter", () => {
-      const maxX = window.innerWidth - noBtn.offsetWidth;
-      const maxY = window.innerHeight - noBtn.offsetHeight;
-      const randomX = Math.random() * maxX;
-      const randomY = Math.random() * maxY;
-
-      noBtn.style.position = "fixed";
-      noBtn.style.left = randomX + "px";
-      noBtn.style.top = randomY + "px";
-      noBtn.style.transform = "none";
+    // NO button dodge logic
+    noBtn.addEventListener("mouseover", () => {
+      // Moves the button to a random spot on the screen
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
       
-      // Make YES grow
-      scale += 0.15;
+      noBtn.style.position = "fixed"; // Switch to fixed so it can go anywhere
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      // Increase the size of the Yes button
+      scale += 0.2;
       yesBtn.style.transform = `scale(${scale})`;
     });
 
     // YES click → switch background and show menu
     yesBtn.addEventListener("click", () => {
-      // Set the background image
+      // Change background image
       document.body.style.background = "url('vday.jpg') no-repeat center center fixed";
       document.body.style.backgroundSize = "cover";
 
-      // Update the card content
+      // Hide the No button entirely once she says Yes
+      noBtn.style.display = "none";
+
+      // Update the card content with transparency
       card.innerHTML = `
-        <h1 style="color: #c9184a; margin-bottom: 10px;">💘 It’s a date! 💘</h1>
-        <p style="font-size: 18px; color: #590d22; margin-top: 0;">See you on 2/14 @ 6:00 PM</p>
-        <hr style="border: 0; height: 1px; background: #ffb3c1; margin: 20px 0;">
-        <h2 style="font-size: 22px; color: #a4133c; text-transform: uppercase; letter-spacing: 1px;">The Menu 🍽️</h2>
-        <div style="text-align: left; display: inline-block; margin-top: 10px;">
+        <h1 style="color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">💘 It’s a date! 💘</h1>
+        <p style="font-size: 18px; color: #fff; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">See you on 2/14 @ 6:00 PM</p>
+        <hr style="border: 0; height: 1px; background: rgba(255,255,255,0.5); margin: 20px 0;">
+        <h2 style="font-size: 22px; color: #fff; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">The Menu 🍽️</h2>
+        <div style="text-align: left; display: inline-block; margin-top: 10px; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
           <p style="font-size: 18px; margin: 10px 0;"><strong>I.</strong> Warm Garlic Bread</p>
           <p style="font-size: 18px; margin: 10px 0;"><strong>II.</strong> Chicken Parmesan</p>
           <p style="font-size: 18px; margin: 10px 0;"><strong>III.</strong> Ice Cream Cake (TBD)</p>
         </div>
       `;
+      // Make the card even more see-through after the click
+      card.style.background = "rgba(0, 0, 0, 0.3)";
     });
 
-    // Heart particles
-    yesBtn.addEventListener("mousemove", (e) => {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.textContent = "💖";
-      heart.style.left = `${e.pageX}px`;
-      heart.style.top = `${e.pageY}px`;
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 1000);
+    // Heart particles on hover
+    document.addEventListener("mousemove", (e) => {
+      if (Math.random() > 0.9) { // Only create hearts occasionally for performance
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💖";
+        heart.style.left = `${e.pageX}px`;
+        heart.style.top = `${e.pageY}px`;
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
+      }
     });
   </script>
 </body>
