@@ -17,31 +17,35 @@
       text-align: center;
       overflow: hidden;
       transition: background 0.8s ease-in-out;
+      position: relative;
     }
 
-    /* Glassmorphism effect: transparent but readable */
+    /* Glassmorphism card */
     .card {
       position: relative;
-      background: rgba(255, 255, 255, 0.2); 
+      background: rgba(255, 255, 255, 0.25); 
       padding: 40px 50px;
       border-radius: 20px;
       box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-      backdrop-filter: blur(8px); /* Blurs the background pic behind the card */
+      backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.18);
       max-width: 400px;
       z-index: 5;
+      color: #fff;
     }
 
-    h1 { color: #e63946; margin-bottom: 10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
-    h2 { margin-top: 0; font-weight: bold; color: #444; }
-    p { font-size: 18px; margin: 20px 0 30px; color: #333; }
+    h1 { color: #e63946; margin-bottom: 10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+    h2 { margin-top: 0; font-weight: bold; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+    p { font-size: 18px; margin: 20px 0 30px; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
 
     .buttons {
       display: flex;
       justify-content: center;
       gap: 20px;
       height: 50px;
+      position: relative;
+      z-index: 5;
     }
 
     button {
@@ -51,15 +55,19 @@
       border: none;
       cursor: pointer;
       transition: transform 0.2s ease;
+      position: relative;
+      z-index: 10;
     }
 
-    #yesBtn { background-color: #e63946; color: white; position: relative; z-index: 10; }
+    #yesBtn { background-color: #e63946; color: white; }
     
     #noBtn { 
       background-color: #adb5bd; 
       color: #333; 
-      position: absolute; /* Changed back to absolute to stay near the card initially */
-      transition: all 0.2s ease;
+      position: fixed; /* Fix so it can teleport anywhere */
+      left: 50%; 
+      top: 60%;
+      transform: translate(-50%, -50%);
       z-index: 11;
     }
 
@@ -102,47 +110,40 @@
 
     // NO button dodge logic
     noBtn.addEventListener("mouseover", () => {
-      // Moves the button to a random spot on the screen
       const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
       const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-      
-      noBtn.style.position = "fixed"; // Switch to fixed so it can go anywhere
       noBtn.style.left = x + "px";
       noBtn.style.top = y + "px";
 
-      // Increase the size of the Yes button
-      scale += 0.2;
+      scale += 0.15;
       yesBtn.style.transform = `scale(${scale})`;
     });
 
     // YES click → switch background and show menu
     yesBtn.addEventListener("click", () => {
-      // Change background image
       document.body.style.background = "url('vday.jpg') no-repeat center center fixed";
       document.body.style.backgroundSize = "cover";
 
-      // Hide the No button entirely once she says Yes
-      noBtn.style.display = "none";
+      // Keep No button visible for fun
+      noBtn.style.display = "block";
 
-      // Update the card content with transparency
       card.innerHTML = `
-        <h1 style="color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">💘 It’s a date! 💘</h1>
-        <p style="font-size: 18px; color: #fff; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">See you on 2/14 @ 6:00 PM</p>
+        <h1 style="color: #fff; text-shadow: 2px 2px 6px rgba(0,0,0,0.6);">💘 It’s a date! 💘</h1>
+        <p style="font-size: 18px; color: #fff; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">See you on 2/14 @ 6:00 PM</p>
         <hr style="border: 0; height: 1px; background: rgba(255,255,255,0.5); margin: 20px 0;">
-        <h2 style="font-size: 22px; color: #fff; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">The Menu 🍽️</h2>
-        <div style="text-align: left; display: inline-block; margin-top: 10px; color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+        <h2 style="font-size: 22px; color: #fff; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">The Menu 🍽️</h2>
+        <div style="text-align: left; display: inline-block; margin-top: 10px; color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
           <p style="font-size: 18px; margin: 10px 0;"><strong>I.</strong> Warm Garlic Bread</p>
           <p style="font-size: 18px; margin: 10px 0;"><strong>II.</strong> Chicken Parmesan</p>
           <p style="font-size: 18px; margin: 10px 0;"><strong>III.</strong> Ice Cream Cake (TBD)</p>
         </div>
       `;
-      // Make the card even more see-through after the click
-      card.style.background = "rgba(0, 0, 0, 0.3)";
+      card.style.background = "rgba(0, 0, 0, 0.25)";
     });
 
-    // Heart particles on hover
+    // Heart particles
     document.addEventListener("mousemove", (e) => {
-      if (Math.random() > 0.9) { // Only create hearts occasionally for performance
+      if (Math.random() > 0.9) {
         const heart = document.createElement("div");
         heart.className = "heart";
         heart.textContent = "💖";
