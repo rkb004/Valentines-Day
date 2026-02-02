@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Save the Date 💌</title>
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      text-align: center;
+    }
+
+    .card {
+      background: white;
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      max-width: 400px;
+    }
+
+    h1 {
+      color: #e63946;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-weight: normal;
+    }
+
+    p {
+      font-size: 18px;
+      margin: 20px 0 30px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 12px 24px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    #yesBtn {
+      background-color: #e63946;
+      color: white;
+    }
+
+    #noBtn {
+      background-color: #adb5bd;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>💖 Save the Date 💖</h1>
+    <h2>February 14th</h2>
+    <p>
+      Will you be my Valentine? 🌹  
+      Dinner, laughs, and good vibes guaranteed.
+    </p>
+
+    <div class="buttons">
+      <button id="yesBtn">Yes 💘</button>
+      <button id="noBtn">No 🙃</button>
+    </div>
+  </div>
+
+  <script>
+    let scale = 1;
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    noBtn.addEventListener("click", () => {
+      scale += 0.2;
+      yesBtn.style.transform = `scale(${scale})`;
+    });
+
+    yesBtn.addEventListener("click", () => {
+      document.body.innerHTML = `
+        <div style="
+          height:100vh;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          font-family:Arial;
+          background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+          text-align:center;">
+          <h1>💘 It’s a date! See you on 2/14 💘</h1>
+        </div>
+      `;
+    });
+  </script>
+</body>
+</html>
