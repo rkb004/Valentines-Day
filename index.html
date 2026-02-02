@@ -12,40 +12,33 @@
       justify-content: center;
       align-items: center;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      background-size: cover;
+      background-position: center;
       text-align: center;
       overflow: hidden;
+      transition: background 0.5s ease-in-out;
     }
 
     .card {
       position: relative;
-      background: white;
+      background: rgba(255, 255, 255, 0.9);
       padding: 40px 50px;
       border-radius: 20px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.2);
       max-width: 400px;
+      backdrop-filter: blur(5px);
     }
 
-    h1 {
-      color: #e63946;
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      margin-top: 0;
-      font-weight: normal;
-    }
-
-    p {
-      font-size: 18px;
-      margin: 20px 0 30px;
-    }
+    h1 { color: #e63946; margin-bottom: 10px; }
+    h2 { margin-top: 0; font-weight: normal; }
+    p { font-size: 18px; margin: 20px 0 30px; }
 
     .buttons {
       display: flex;
       justify-content: center;
       gap: 20px;
-      position: relative; /* for absolute positioning of NO */
-      height: 50px; /* space for button to move */
+      position: relative;
+      height: 50px;
     }
 
     button {
@@ -55,21 +48,15 @@
       border: none;
       cursor: pointer;
       transition: transform 0.2s ease;
-      position: relative;
     }
 
-    #yesBtn {
-      background-color: #e63946;
-      color: white;
-    }
-
-    #noBtn {
-      background-color: #adb5bd;
-      color: #333;
-      position: absolute; /* allows it to teleport */
+    #yesBtn { background-color: #e63946; color: white; z-index: 10; }
+    #noBtn { 
+      background-color: #adb5bd; 
+      color: #333; 
+      position: absolute; 
       left: 50%; 
-      top: 0;
-      transform: translateX(-50%);
+      transform: translateX(-50%); 
     }
 
     .heart {
@@ -87,7 +74,8 @@
   </style>
 </head>
 <body>
-  <div class="card">
+
+  <div class="card" id="mainCard">
     <h1>💖 Save the Date 💖</h1>
     <h2>February 14th</h2>
     <p>
@@ -104,92 +92,55 @@
   <script>
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
-    const card = document.querySelector(".card");
+    const card = document.getElementById("mainCard");
     let scale = 1;
-    let dodgeSpeed = 100; // initial dodge distance
-
-    // YES grows every time NO is clicked
-    noBtn.addEventListener("click", () => {
-      scale += 0.2;
-      yesBtn.style.transform = `scale(${scale})`;
-    });
 
     // NO button teleport / dodge
     noBtn.addEventListener("mouseenter", () => {
-      dodgeSpeed += 20; // moves farther each hover
-      const containerRect = card.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
-
-      // Random position inside card boundaries
-      const maxX = containerRect.width - btnRect.width;
-      const maxY = containerRect.height - btnRect.height;
+      const maxX = window.innerWidth - noBtn.offsetWidth;
+      const maxY = window.innerHeight - noBtn.offsetHeight;
       const randomX = Math.random() * maxX;
       const randomY = Math.random() * maxY;
 
-      noBtn.style.transform = `translate(${randomX}px, ${randomY}px) scale(1.1)`;
+      noBtn.style.position = "fixed";
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+      noBtn.style.transform = "none";
+      
+      // Make YES grow
+      scale += 0.15;
+      yesBtn.style.transform = `scale(${scale})`;
     });
 
-    // Reset after mouse leaves
-    noBtn.addEventListener("mouseleave", () => {
-      // keeps it ready for next hover
-    });
-
-    // YES button confetti on hover
-    yesBtn.addEventListener("mouseenter", (e) => {
-      for (let i = 0; i < 5; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.textContent = "💖";
-        heart.style.left = `${e.clientX - card.offsetLeft}px`;
-        heart.style.top = `${e.clientY - card.offsetTop}px`;
-        card.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 1000);
-      }
-    });
-
-    // YES click → show menu + time
+    // YES click → switch background and show menu
     yesBtn.addEventListener("click", () => {
-      document.body.innerHTML = `
-        <div style="
-          height:100vh;
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          font-family:Arial, sans-serif;
-          background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-          text-align:center;
-          padding:20px;">
-          <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 400px; margin: auto; padding: 30px; border: 2px solid #ff4d6d; border-radius: 15px; text-align: center; background-color: #fff0f3;">
-  
-  <h1 style="color: #c9184a; margin-bottom: 10px;">💘 It’s a date! 💘</h1>
-  <p style="font-size: 18px; color: #590d22; margin-top: 0;">See you on 2/14 @ 6:00 PM</p>
-  
-  <hr style="border: 0; height: 1px; background: #ffb3c1; margin: 20px 0;">
-  
-  <h2 style="font-size: 22px; color: #a4133c; text-transform: uppercase; letter-spacing: 1px;">The Menu 🍽️</h2>
-  
-  <div style="text-align: left; display: inline-block; margin-top: 10px;">
-    <p style="font-size: 18px; margin: 10px 0;">
-      <strong>I.</strong> Warm Garlic Bread<br>
-      <span style="font-size: 14px; color: #800f2f;"><i>The perfect starter</i></span>
-    </p>
-    
-    <p style="font-size: 18px; margin: 10px 0;">
-      <strong>II.</strong> Chicken Parmesan<br>
-      <span style="font-size: 14px; color: #800f2f;"><i>Served with fresh pasta</i></span>
-    </p>
-    
-    <p style="font-size: 18px; margin: 10px 0;">
-      <strong>III.</strong> Ice Cream Cake<br>
-      <span style="font-size: 14px; color: #800f2f;"><i>Flavor: TBD</i></span>
-    </p>
-  </div>
+      // Set the background image
+      document.body.style.background = "url('vday.jpg') no-repeat center center fixed";
+      document.body.style.backgroundSize = "cover";
 
-</div>
-          </p>
+      // Update the card content
+      card.innerHTML = `
+        <h1 style="color: #c9184a; margin-bottom: 10px;">💘 It’s a date! 💘</h1>
+        <p style="font-size: 18px; color: #590d22; margin-top: 0;">See you on 2/14 @ 6:00 PM</p>
+        <hr style="border: 0; height: 1px; background: #ffb3c1; margin: 20px 0;">
+        <h2 style="font-size: 22px; color: #a4133c; text-transform: uppercase; letter-spacing: 1px;">The Menu 🍽️</h2>
+        <div style="text-align: left; display: inline-block; margin-top: 10px;">
+          <p style="font-size: 18px; margin: 10px 0;"><strong>I.</strong> Warm Garlic Bread</p>
+          <p style="font-size: 18px; margin: 10px 0;"><strong>II.</strong> Chicken Parmesan</p>
+          <p style="font-size: 18px; margin: 10px 0;"><strong>III.</strong> Ice Cream Cake (TBD)</p>
         </div>
       `;
+    });
+
+    // Heart particles
+    yesBtn.addEventListener("mousemove", (e) => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "💖";
+      heart.style.left = `${e.pageX}px`;
+      heart.style.top = `${e.pageY}px`;
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1000);
     });
   </script>
 </body>
