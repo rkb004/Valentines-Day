@@ -141,11 +141,11 @@
       noBtn.style.display = "none";
 
       // 3. Make the card dark & transparent so text pops over the photo
-      card.style.background = "rgba(0, 0, 0, 0.6)";
+      card.style.background = "rgba(0, 0, 0, 0.65)"; // Darkened slightly for better gold contrast
       card.style.border = "1px solid rgba(255, 255, 255, 0.3)";
       card.style.color = "white";
 
-      // 4. Update the Text (The Menu)
+      // 4. Update the Text (The Menu) - NOW WITH GOLD TEXT
       card.innerHTML = `
         <h1 style="color: #ff4d6d; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin-bottom: 10px;">💘 It’s a date! 💘</h1>
         <p style="font-size: 20px; color: #fff; margin-top: 0; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">See you on 2/14 @ 6:00 PM</p>
@@ -154,17 +154,17 @@
         
         <h2 style="font-size: 24px; color: #ffccd5; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">The Menu 🍽️</h2>
         
-        <div style="text-align: left; display: inline-block; margin-top: 10px; color: #fff;">
+        <div style="text-align: left; display: inline-block; margin-top: 10px; color: #FFD700;">
           <p style="font-size: 18px; margin: 12px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
             <strong>I.</strong> Warm Garlic Bread
           </p>
           <p style="font-size: 18px; margin: 12px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
             <strong>II.</strong> Chicken Parmesan <br>
-            <span style="font-size:14px; color: #ddd;">(with fresh pasta)</span>
+            <span style="font-size:14px; color: #ffffff;">(with fresh pasta)</span>
           </p>
           <p style="font-size: 18px; margin: 12px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">
             <strong>III.</strong> Ice Cream Cake <br>
-            <span style="font-size:14px; color: #ddd;">(Flavor: TBD)</span>
+            <span style="font-size:14px; color: #ffffff;">(Flavor: TBD)</span>
           </p>
         </div>
       `;
